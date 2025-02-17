@@ -1,7 +1,6 @@
 ﻿using buzzaraApi.Data;
 using buzzaraApi.Models;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
 
 namespace buzzaraApi.Services
 {
@@ -14,25 +13,51 @@ namespace buzzaraApi.Services
             _context = context;
         }
 
-        public async Task<Usuario?> RegistrarUsuario(Usuario usuario)
+        // 📌 Criar um novo usuário
+        public async Task<Usuario> RegistrarUsuario(Usuario usuario)
         {
-            // Verifica se o email já está cadastrado
-            if (await _context.Usuarios.AnyAsync(u => u.Email == usuario.Email))
-            {
-                throw new Exception("E-mail já está cadastrado.");
-            }
-
-            // Criptografa a senha antes de salvar
-            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash);
-
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
             return usuario;
         }
 
-        public async Task<Usuario?> BuscarPorEmail(string email)
+        // 📌 Buscar todos os usuários
+        public async Task<List<Usuario>> ObterTodosUsuarios()
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Usuarios.ToListAsync();
+        }
+
+        // 📌 Buscar um usuário por ID
+        public async Task<Usuario?> ObterUsuarioPorId(int id)
+        {
+            return await _context.Usuarios.FindAsync(id);
+        }
+
+        // 📌 Atualizar um usuário
+        public async Task<Usuario?> AtualizarUsuario(int id, Usuario usuarioAtualizado)
+        {
+            var usuarioExistente = await _context.Usuarios.FindAsync(id);
+            if (usuarioExistente == null)
+                return null;
+
+            usuarioExistente.Nome = usuarioAtualizado.Nome;
+            usuarioExistente.Email = usuarioAtualizado.Email;
+            usuarioExistente.SenhaHash = usuarioAtualizado.SenhaHash;
+
+            await _context.SaveChangesAsync();
+            return usuarioExistente;
+        }
+
+        // 📌 Deletar um usuário
+        public async Task<bool> DeletarUsuario(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+                return false;
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
