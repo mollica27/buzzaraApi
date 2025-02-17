@@ -1,40 +1,32 @@
-﻿using buzzaraApi.Data;
-using buzzaraApi.Models;
+﻿using buzzaraApi.Models;
+using buzzaraApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using BCrypt.Net;
 
 namespace buzzaraApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/usuarios")]
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UsuarioService _usuarioService;
 
-        public UsuariosController(ApplicationDbContext context)
+        public UsuariosController(UsuarioService usuarioService)
         {
-            _context = context;
+            _usuarioService = usuarioService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] Usuario usuario)
+        public async Task<IActionResult> RegistrarUsuario([FromBody] Usuario usuario)
         {
-            if (string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.SenhaHash))
+            try
             {
-                return BadRequest("Email e Senha são obrigatórios.");
+                var novoUsuario = await _usuarioService.RegistrarUsuario(usuario);
+                return Ok(new { message = "Usuário cadastrado com sucesso!", usuario = novoUsuario });
             }
-
-            var existingUser = _context.Usuarios.FirstOrDefault(u => u.Email == usuario.Email);
-            if (existingUser != null)
+            catch (Exception ex)
             {
-                return BadRequest("Usuário já cadastrado.");
+                return BadRequest(new { message = ex.Message });
             }
-
-            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash);
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Usuário cadastrado com sucesso!" });
         }
     }
 }

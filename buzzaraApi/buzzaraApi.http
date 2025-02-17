@@ -1,6 +1,0 @@
-@buzzaraApi_HostAddress = http://localhost:5186
-
-GET {{buzzaraApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
