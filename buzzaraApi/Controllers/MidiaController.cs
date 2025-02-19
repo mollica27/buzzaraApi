@@ -40,14 +40,19 @@ namespace buzzaraApi.Controllers
         // POST: api/midias/upload-foto
         [HttpPost("upload-foto")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadFoto([FromForm] IFormFile file, [FromForm] int perfilAcompanhanteID)
+        public async Task<IActionResult> UploadFoto([FromForm] UploadFotoModel model)
         {
+            // Extrair as propriedades
+            var file = model.File;
+            var perfilAcompanhanteID = model.PerfilAcompanhanteID;
+
             var result = await _midiaService.UploadFoto(file, perfilAcompanhanteID);
             if (result == null)
                 return NotFound(new { message = "Perfil não encontrado ou arquivo inválido." });
 
             return Ok(result);
         }
+
 
         // Aqui você pode ter métodos de deleção de foto, listagem de fotos, etc.
     }
