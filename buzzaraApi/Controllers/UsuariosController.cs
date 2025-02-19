@@ -93,5 +93,7 @@ namespace buzzaraApi.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+
     }
 }

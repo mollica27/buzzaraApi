@@ -7,6 +7,9 @@
         public required string Email { get; set; }
         public required string SenhaHash { get; set; }
         public DateTime DataCadastro { get; set; } = DateTime.Now;
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiration { get; set; }
+
 
         // Relação
         public ICollection<PerfilAcompanhante> PerfisAcompanhantes { get; set; } = new List<PerfilAcompanhante>();

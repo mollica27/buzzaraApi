@@ -1,6 +1,7 @@
 ﻿using buzzaraApi.Data;
 using buzzaraApi.Models;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net; // Biblioteca bcrypt
 
 namespace buzzaraApi.Services
 {
@@ -13,42 +14,46 @@ namespace buzzaraApi.Services
             _context = context;
         }
 
-        // 📌 Criar um novo usuário
         public async Task<Usuario> RegistrarUsuario(Usuario usuario)
         {
+            // Hash da senha antes de salvar
+            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuario.SenhaHash);
+
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
             return usuario;
         }
 
-        // 📌 Buscar todos os usuários
         public async Task<List<Usuario>> ObterTodosUsuarios()
         {
             return await _context.Usuarios.ToListAsync();
         }
 
-        // 📌 Buscar um usuário por ID
         public async Task<Usuario?> ObterUsuarioPorId(int id)
         {
             return await _context.Usuarios.FindAsync(id);
         }
 
-        // 📌 Atualizar um usuário
         public async Task<Usuario?> AtualizarUsuario(int id, Usuario usuarioAtualizado)
         {
             var usuarioExistente = await _context.Usuarios.FindAsync(id);
             if (usuarioExistente == null)
                 return null;
 
+            // Se a senha tiver sido alterada, re-hasheie
+            if (usuarioAtualizado.SenhaHash != usuarioExistente.SenhaHash)
+            {
+                usuarioExistente.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuarioAtualizado.SenhaHash);
+            }
+
             usuarioExistente.Nome = usuarioAtualizado.Nome;
             usuarioExistente.Email = usuarioAtualizado.Email;
-            usuarioExistente.SenhaHash = usuarioAtualizado.SenhaHash;
+            // ... outros campos
 
             await _context.SaveChangesAsync();
             return usuarioExistente;
         }
 
-        // 📌 Deletar um usuário
         public async Task<bool> DeletarUsuario(int id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
