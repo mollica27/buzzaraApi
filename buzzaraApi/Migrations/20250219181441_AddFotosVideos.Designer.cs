@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using buzzaraApi.Data;
 
@@ -11,9 +12,11 @@ using buzzaraApi.Data;
 namespace buzzaraApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250219181441_AddFotosVideos")]
+    partial class AddFotosVideos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,11 +214,13 @@ namespace buzzaraApi.Migrations
 
             modelBuilder.Entity("buzzaraApi.Models.FotoAcompanhante", b =>
                 {
-                    b.HasOne("buzzaraApi.Models.PerfilAcompanhante", null)
+                    b.HasOne("buzzaraApi.Models.PerfilAcompanhante", "PerfilAcompanhante")
                         .WithMany("Fotos")
                         .HasForeignKey("PerfilAcompanhanteID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PerfilAcompanhante");
                 });
 
             modelBuilder.Entity("buzzaraApi.Models.PerfilAcompanhante", b =>
