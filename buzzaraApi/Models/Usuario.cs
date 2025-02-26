@@ -10,6 +10,10 @@
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiration { get; set; }
 
+        public required string Telefone { get; set; }
+        public required string Cpf { get; set; }
+        public string? Genero { get; set; }
+
         public bool Ativo { get; set; } = true;
         public string? Role { get; set; } = "Acompanhante";
 

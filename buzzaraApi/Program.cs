@@ -39,6 +39,8 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<PerfilAcompanhanteService>();
 builder.Services.AddScoped<MidiaService>();
+builder.Services.AddScoped<NovoUsuarioService>();
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
