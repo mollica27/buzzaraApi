@@ -1,9 +1,11 @@
 ﻿using buzzaraApi.DTOs;
 using buzzaraApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace buzzaraApi.Controllers
 {
+    [Authorize]
     [Route("api/midias")]
     [ApiController]
     public class MidiaController : ControllerBase
@@ -15,7 +17,6 @@ namespace buzzaraApi.Controllers
             _midiaService = midiaService;
         }
 
-        // POST: api/midias/fotos
         [HttpPost("fotos")]
         public async Task<IActionResult> AdicionarFoto([FromBody] FotoAcompanhanteDTO dto)
         {
@@ -26,7 +27,6 @@ namespace buzzaraApi.Controllers
             return Ok(foto);
         }
 
-        // POST: api/midias/videos
         [HttpPost("videos")]
         public async Task<IActionResult> AdicionarVideo([FromBody] VideoAcompanhanteDTO dto)
         {
@@ -37,7 +37,6 @@ namespace buzzaraApi.Controllers
             return Ok(video);
         }
 
-        // POST: api/midias/upload-foto
         [HttpPost("upload-foto")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadFoto([FromForm] UploadFotoModel model)

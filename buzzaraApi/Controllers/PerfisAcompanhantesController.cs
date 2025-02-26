@@ -1,12 +1,14 @@
 ﻿using buzzaraApi.DTOs;
 using buzzaraApi.Models;
 using buzzaraApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace buzzaraApi.Controllers
 {
     [Route("api/perfis")]
     [ApiController]
+    [Authorize]
     public class PerfisAcompanhantesController : ControllerBase
     {
         private readonly PerfilAcompanhanteService _perfilService;

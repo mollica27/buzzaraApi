@@ -12,14 +12,11 @@ namespace buzzaraApi.SwaggerFilters
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            // Busca parâmetros que sejam IFormFile
             var fileParams = context.ApiDescription.ParameterDescriptions
                 .Where(p => p.ModelMetadata?.ModelType == typeof(Microsoft.AspNetCore.Http.IFormFile));
 
             if (!fileParams.Any())
                 return;
-
-            // Se há parâmetros de arquivo, define o requestBody para "multipart/form-data"
             operation.RequestBody = new OpenApiRequestBody
             {
                 Content =

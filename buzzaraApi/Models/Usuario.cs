@@ -10,8 +10,9 @@
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiration { get; set; }
 
+        public bool Ativo { get; set; } = true;
+        public string? Role { get; set; } = "Acompanhante";
 
-        // Relação
         public ICollection<PerfilAcompanhante> PerfisAcompanhantes { get; set; } = new List<PerfilAcompanhante>();
         public ICollection<Agendamento> Agendamentos { get; set; } = new List<Agendamento>();
     }
