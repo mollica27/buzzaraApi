@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace buzzaraApi.Controllers
 {
     [Authorize]
-    [Route("api/midias")]
+    [Route("/midias")]
     [ApiController]
     public class MidiaController : ControllerBase
     {

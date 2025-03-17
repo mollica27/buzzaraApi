@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace buzzaraApi.Controllers
 {
-    [Route("api/perfis")]
+    [Route("/perfis")]
     [ApiController]
     [Authorize]
     public class PerfisAcompanhantesController : ControllerBase

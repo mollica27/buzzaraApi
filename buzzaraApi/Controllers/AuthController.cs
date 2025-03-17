@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace buzzaraApi.Controllers
 {
-    [Route("api/auth")]
+    [Route("/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {

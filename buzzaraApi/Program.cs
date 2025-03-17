@@ -15,8 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = Encoding.UTF8.GetBytes(
-    jwtSettings["Secret"]
-    ?? throw new InvalidOperationException("JWT Secret Key is missing."));
+    jwtSettings["Secret"] ?? throw new InvalidOperationException("JWT Secret Key is missing."));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -41,6 +40,18 @@ builder.Services.AddScoped<PerfilAcompanhanteService>();
 builder.Services.AddScoped<MidiaService>();
 builder.Services.AddScoped<NovoUsuarioService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -59,7 +70,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
+
 app.UseStaticFiles();
 
 app.UseAuthentication();

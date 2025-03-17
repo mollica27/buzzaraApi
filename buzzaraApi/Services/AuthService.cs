@@ -27,9 +27,8 @@ namespace buzzaraApi.Services
         /// </summary>
         public async Task<AuthResponseDTO?> Login(LoginDTO loginDTO)
         {
-
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == loginDTO.Email);
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(loginDTO.Senha, usuario.SenhaHash))
+            if (usuario == null || !BCrypt.Net.BCrypt.Verify(loginDTO.Password, usuario.SenhaHash))
             {
                 return null;
             }
@@ -43,8 +42,16 @@ namespace buzzaraApi.Services
 
             return new AuthResponseDTO
             {
-                Token = token,
-                RefreshToken = refreshToken
+                // Renomeie 'Token' para 'AccessToken'
+                AccessToken = token,
+                RefreshToken = refreshToken,
+                UserData = new
+                {
+                    Id = usuario.UsuarioID,
+                    Nome = usuario.Nome,
+                    Email = usuario.Email,
+                    Role = usuario.Role,
+                }
             };
         }
 
@@ -109,8 +116,15 @@ namespace buzzaraApi.Services
 
             return new AuthResponseDTO
             {
-                Token = newToken,
-                RefreshToken = newRefreshToken
+                AccessToken = newToken,
+                RefreshToken = newRefreshToken,
+                UserData = new
+                {
+                    Id = usuario.UsuarioID,
+                    Nome = usuario.Nome,
+                    Email = usuario.Email,
+                    Role = usuario.Role,
+                }
             };
         }
 

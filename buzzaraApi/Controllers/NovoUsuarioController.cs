@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace buzzaraApi.Controllers
 {
-    [Route("api/novousuario")]
+    [Route("/novousuario")]
     [ApiController]
     public class NovoUsuarioController : ControllerBase
     {
